@@ -1,5 +1,10 @@
 package examples;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import cspSolver.BTSolver;
 import cspSolver.BTSolver.ConsistencyCheck;
 import cspSolver.BTSolver.ValueSelectionHeuristic;
@@ -23,7 +28,7 @@ public class monsterSudokuSolver {
 		}
 		return false;
 	}
-	public static void solveSudoku(String[] args){
+	private static void solveSudoku(String[] args){
 		SudokuFile sf = SudokuBoardReader.readFile(args[0]);
 		BTSolver solver = new BTSolver(sf);
 		
@@ -48,6 +53,7 @@ public class monsterSudokuSolver {
 		if(solver.hasSolution())
 		{
 			System.out.println(solver.getSolution());
+			writeSolutionToFile(args[1], solver.getSolution());
 			System.out.println("Solution and log printed to file: " + args[1]);
 		}
 
@@ -55,5 +61,26 @@ public class monsterSudokuSolver {
 		{
 			System.out.println("Failed to find a solution");
 		}
+	}
+	private static void writeSolutionToFile(String outputFile, SudokuFile solution){
+		 File outFile = new File(outputFile);
+		 if (!outFile.exists()) {
+			 try {
+			    // Create the new file with default permissions, etc.
+			    outFile.createNewFile();
+			} catch (IOException x) {
+			    // Some other sort of failure, such as permissions.
+			    System.err.format("createNewFile error: %s%n", x);
+			}
+		 }
+		 try{
+			 FileWriter fw = new FileWriter(outFile);
+			 BufferedWriter bw = new BufferedWriter(fw);
+			 bw.write(solution.toString());
+			 bw.close();
+		 } catch (IOException x){
+			 System.err.format("Buffered writer error: %s%n", x);
+		 }
+		
 	}
 }
