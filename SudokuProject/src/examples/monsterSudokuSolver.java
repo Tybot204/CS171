@@ -18,7 +18,7 @@ public class monsterSudokuSolver {
 		
 	}
 	public static boolean argsExist(String[] args){
-		if(args.length >= 1){
+		if(args.length >= 2){
 			return true;
 		}
 		return false;
@@ -48,6 +48,7 @@ public class monsterSudokuSolver {
 		if(solver.hasSolution())
 		{
 			System.out.println(solver.getSolution());
+			System.out.println("Solution and log printed to file: " + args[1]);
 		}
 
 		else
