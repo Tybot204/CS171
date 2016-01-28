@@ -53,7 +53,9 @@ public class monsterSudokuSolver {
 		if(solver.hasSolution())
 		{
 			System.out.println(solver.getSolution());
-			writeSolutionToFile(args[1], solver.getSolution());
+			String content = solver.getSolution().toString();
+			content += ("\n" + solver.getSolverStats());
+			writeContentToFile(args[1], content);
 			System.out.println("Solution and log printed to file: " + args[1]);
 		}
 
@@ -62,7 +64,7 @@ public class monsterSudokuSolver {
 			System.out.println("Failed to find a solution");
 		}
 	}
-	private static void writeSolutionToFile(String outputFile, SudokuFile solution){
+	private static void writeContentToFile(String outputFile, String content){
 		 File outFile = new File(outputFile);
 		 if (!outFile.exists()) {
 			 try {
@@ -76,7 +78,7 @@ public class monsterSudokuSolver {
 		 try{
 			 FileWriter fw = new FileWriter(outFile);
 			 BufferedWriter bw = new BufferedWriter(fw);
-			 bw.write(solution.toString());
+			 bw.write(content);
 			 bw.close();
 		 } catch (IOException x){
 			 System.err.format("Buffered writer error: %s%n", x);

@@ -88,6 +88,10 @@ public class BTSolver implements Runnable{
 		System.out.println("Number of assignments: " + numAssignments);
 		System.out.println("Number of backtracks: " + numBacktracks);
 	}
+	public String getSolverStats(){
+		String stats = "TOTAL_START = " + startTime + " ms";
+		return stats;
+	}
 
 	/**
 	 * 
