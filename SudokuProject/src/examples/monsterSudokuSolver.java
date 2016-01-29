@@ -13,26 +13,38 @@ import sudoku.SudokuFile;
 import sudoku.SudokuBoardReader;
 
 public class monsterSudokuSolver {
+	private static String inputFile;
+	private static String outputFile;
+	private static int solverTimeout;
 	private static long startTime;
 	
 	public static void main(String[]args){
 		startTime = System.currentTimeMillis();
-		if(argsExist(args)){
-			solveSudoku(args);
+		if(parseInputs(args)){
+			solveSudoku();
 		}
 		else{
 			System.out.println("Invalid amount of arguments\nExiting Program");
 		}
 		
 	}
-	public static boolean argsExist(String[] args){
-		if(args.length >= 2){
+
+	public static boolean parseInputs(String[] args){
+		if(args.length >= 3){
+			inputFile = args[0];
+			outputFile = args[1];
+			try {
+				solverTimeout = Integer.parseInt(args[2]);
+			} catch(NumberFormatException e) {
+				return false;
+			}
 			return true;
 		}
 		return false;
 	}
-	private static void solveSudoku(String[] args){
-		SudokuFile sf = SudokuBoardReader.readFile(args[0]);
+
+	private static void solveSudoku(){
+		SudokuFile sf = SudokuBoardReader.readFile(inputFile);
 		BTSolver solver = new BTSolver(sf);
 		
 		solver.setConsistencyChecks(ConsistencyCheck.None);
@@ -43,7 +55,7 @@ public class monsterSudokuSolver {
 		try
 		{
 			t1.start();
-			t1.join(60000);
+			t1.join(solverTimeout);
 			if(t1.isAlive())
 			{
 				t1.interrupt();
@@ -56,15 +68,16 @@ public class monsterSudokuSolver {
 		if(solver.hasSolution())
 		{
 			System.out.println(solver.getSolution());
-			writeContentToFile(args[1], solver.getSolverStats(startTime, System.currentTimeMillis()));
-			System.out.println("Solution and log printed to file: " + args[1]);
 		}
-
 		else
 		{
 			System.out.println("Failed to find a solution");
 		}
+
+		writeContentToFile(outputFile, solver.getSolverStats(startTime, System.currentTimeMillis()));
+		System.out.println("Solution and log printed to file: " + outputFile);
 	}
+
 	private static void writeContentToFile(String outputFile, String content){
 		 File outFile = new File(outputFile);
 		 if (!outFile.exists()) {

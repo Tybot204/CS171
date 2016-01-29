@@ -90,7 +90,20 @@ public class SudokuFile {
 		this.board = board;
 	}
 	
-	public String getOneLineString() {
+	public String getOneLineFailure() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				sb.append("0,");
+			}
+		}
+		sb.setLength(sb.length() - 1);
+		sb.append(")");
+		return sb.toString();
+	}
+	
+	public String getOneLineSolution() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("(");
 		for (int i = 0; i < N; i++) {

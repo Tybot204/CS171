@@ -98,8 +98,13 @@ public class BTSolver implements Runnable{
 		sb.append("SEARCH_START=" + startTime/1000 + "\n");
 		sb.append("SEARCH_DONE=" + endTime/1000 + "\n");
 		sb.append("SOLUTION_TIME=" + ((preprocessingDone - preprocessingStart) + getTimeTaken())/1000 + "\n");
-		sb.append("STATUS=" + ((hasSolution) ? "success" : "timeout") + "\n");
-		sb.append("SOLUTION=" + sudokuGrid.getOneLineString() + "\n");
+		if (hasSolution) {
+			sb.append("STATUS=success\n");
+			sb.append("SOLUTION=" + sudokuGrid.getOneLineSolution() + "\n");			
+		} else {
+			sb.append("STATUS=timeout\n");
+			sb.append("SOLUTION=" + sudokuGrid.getOneLineFailure() + "\n");
+		}
 		sb.append("COUNT_NODES=" + numAssignments + "\n");
 		sb.append("COUNT_DEADENDS=" + numBacktracks + "\n");
 		return sb.toString();
