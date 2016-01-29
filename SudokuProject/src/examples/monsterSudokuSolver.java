@@ -16,10 +16,11 @@ public class monsterSudokuSolver {
 	private static String inputFile;
 	private static String outputFile;
 	private static int solverTimeout;
-	private static long startTime;
+	private static long preprocessingStartTime;
+	private static long preprocessingEndTime;
 	
 	public static void main(String[]args){
-		startTime = System.currentTimeMillis();
+		preprocessingStartTime = System.currentTimeMillis();
 		if(parseInputs(args)){
 			solveSudoku();
 		}
@@ -51,11 +52,12 @@ public class monsterSudokuSolver {
 		solver.setValueSelectionHeuristic(ValueSelectionHeuristic.None);
 		solver.setVariableSelectionHeuristic(VariableSelectionHeuristic.None);
 		
+		preprocessingEndTime = System.currentTimeMillis();
 		Thread t1 = new Thread(solver);
 		try
 		{
 			t1.start();
-			t1.join(solverTimeout);
+			t1.join(solverTimeout * 1000);
 			if(t1.isAlive())
 			{
 				t1.interrupt();
@@ -74,7 +76,7 @@ public class monsterSudokuSolver {
 			System.out.println("Failed to find a solution");
 		}
 
-		writeContentToFile(outputFile, solver.getSolverStats(startTime, System.currentTimeMillis()));
+		writeContentToFile(outputFile, solver.getSolverStats(preprocessingStartTime, preprocessingEndTime));
 		System.out.println("Solution and log printed to file: " + outputFile);
 	}
 
