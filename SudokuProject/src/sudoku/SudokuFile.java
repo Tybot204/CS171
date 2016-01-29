@@ -90,6 +90,19 @@ public class SudokuFile {
 		this.board = board;
 	}
 	
+	public String getOneLineString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				sb.append(Odometer.intToOdometer(board[j][i]) + ",");
+			}
+		}
+		sb.setLength(sb.length() - 1);
+		sb.append(")");
+		return sb.toString();
+	}
+	
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();

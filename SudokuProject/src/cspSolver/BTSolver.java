@@ -25,13 +25,14 @@ public class BTSolver implements Runnable{
 	private long startTime;
 	private long endTime;
 	
-	public enum VariableSelectionHeuristic 	{ None, MinimumRemainingValue, Degree };
-	public enum ValueSelectionHeuristic 		{ None, LeastConstrainingValue };
-	public enum ConsistencyCheck				{ None, ForwardChecking, ArcConsistency };
+	public enum VariableSelectionHeuristic { None, MinimumRemainingValue, Degree };
+	public enum ValueSelectionHeuristic    { None, LeastConstrainingValue };
+	public enum ConsistencyCheck		   { None, ForwardChecking, ArcConsistency };
 	
 	private VariableSelectionHeuristic varHeuristics;
 	private ValueSelectionHeuristic valHeuristics;
 	private ConsistencyCheck cChecks;
+
 	//===============================================================================
 	// Constructors
 	//===============================================================================
@@ -88,9 +89,20 @@ public class BTSolver implements Runnable{
 		System.out.println("Number of assignments: " + numAssignments);
 		System.out.println("Number of backtracks: " + numBacktracks);
 	}
-	public String getSolverStats(){
-		String stats = "TOTAL_START = " + startTime + " ms";
-		return stats;
+
+	public String getSolverStats(long preprocessingStart, long preprocessingDone){
+		StringBuilder sb = new StringBuilder();
+		sb.append("TOTAL_START=" + preprocessingStart/1000 + "\n");
+		sb.append("PREPROCESSING_START=" + preprocessingStart/1000 + "\n");
+		sb.append("PREPROCESSING_DONE=" + preprocessingDone/1000 + "\n");
+		sb.append("SEARCH_START=" + startTime/1000 + "\n");
+		sb.append("SEARCH_DONE=" + endTime/1000 + "\n");
+		sb.append("SOLUTION_TIME=" + ((preprocessingDone - preprocessingStart) + getTimeTaken())/1000 + "\n");
+		sb.append("STATUS=" + ((hasSolution) ? "success" : "timeout") + "\n");
+		sb.append("SOLUTION=" + sudokuGrid.getOneLineString() + "\n");
+		sb.append("COUNT_NODES=" + numAssignments + "\n");
+		sb.append("COUNT_DEADENDS=" + numBacktracks + "\n");
+		return sb.toString();
 	}
 
 	/**

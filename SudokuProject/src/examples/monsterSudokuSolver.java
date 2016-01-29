@@ -13,7 +13,10 @@ import sudoku.SudokuFile;
 import sudoku.SudokuBoardReader;
 
 public class monsterSudokuSolver {
+	private static long startTime;
+	
 	public static void main(String[]args){
+		startTime = System.currentTimeMillis();
 		if(argsExist(args)){
 			solveSudoku(args);
 		}
@@ -53,9 +56,7 @@ public class monsterSudokuSolver {
 		if(solver.hasSolution())
 		{
 			System.out.println(solver.getSolution());
-			String content = solver.getSolution().toString();
-			content += ("\n" + solver.getSolverStats());
-			writeContentToFile(args[1], content);
+			writeContentToFile(args[1], solver.getSolverStats(startTime, System.currentTimeMillis()));
 			System.out.println("Solution and log printed to file: " + args[1]);
 		}
 
