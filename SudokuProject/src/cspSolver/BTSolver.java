@@ -190,16 +190,18 @@ public class BTSolver implements Runnable{
 		{
 			if(v.isAssigned())
 			{
-				
+				Trail.getTrail().undo();
+				System.out.println("Variable: " +  v.toString());
+				System.out.println("================== ITS LIT ==============");
 				for(Variable vOther : network.getNeighborsOfVariable(v))
 				{
 					Domain temp = vOther.getDomain();
 					temp.remove(v.getAssignment());
 					if(temp.size() == 0){
-						Trail.clearTrail();
 						return false;
 					}
 					Trail.getTrail().placeBreadCrumb();
+					
 					vOther.updateDomain(temp);
 				}
 			}
