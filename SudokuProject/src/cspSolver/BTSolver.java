@@ -186,8 +186,25 @@ public class BTSolver implements Runnable{
 	 */
 	private boolean forwardChecking()
 	{
-		System.out.println("Write Code Here, tbh");
-		return false;
+		for(Variable v : network.getVariables())
+		{
+			if(v.isAssigned())
+			{
+				
+				for(Variable vOther : network.getNeighborsOfVariable(v))
+				{
+					Domain temp = vOther.getDomain();
+					temp.remove(v.getAssignment());
+					if(temp.size() == 0){
+						Trail.clearTrail();
+						return false;
+					}
+					Trail.getTrail().placeBreadCrumb();
+					vOther.updateDomain(temp);
+				}
+			}
+		}
+		return true;
 	}
 	
 	/**
