@@ -53,10 +53,12 @@ public class monsterSudokuSolver {
 		BTSolver solver = new BTSolver(sf);
 	
 		switch(consistencyCheck.toLowerCase()){
-			case "fc": solver.setConsistencyChecks(ConsistencyCheck.ForwardChecking);
-					   break;
-			default: solver.setConsistencyChecks(ConsistencyCheck.None);
-					 break;
+			case "fc":
+				solver.setConsistencyChecks(ConsistencyCheck.ForwardChecking);
+				break;
+			default:
+				solver.setConsistencyChecks(ConsistencyCheck.None);
+				break;
 		}
 		
 		solver.setValueSelectionHeuristic(ValueSelectionHeuristic.None);
