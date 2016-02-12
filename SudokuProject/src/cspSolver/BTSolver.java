@@ -186,6 +186,7 @@ public class BTSolver implements Runnable{
 	 */
 	private boolean forwardChecking()
 	{
+		System.out.println("holy ass lol");
 		return false;
 	}
 	

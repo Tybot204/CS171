@@ -18,6 +18,7 @@ public class monsterSudokuSolver {
 	private static int solverTimeout;
 	private static long preprocessingStartTime;
 	private static long preprocessingEndTime;
+	private static String consistencyCheck = "";
 	
 	public static void main(String[]args){
 		preprocessingStartTime = System.currentTimeMillis();
@@ -34,6 +35,9 @@ public class monsterSudokuSolver {
 		if(args.length >= 3){
 			inputFile = args[0];
 			outputFile = args[1];
+			if(args.length >= 4){
+				consistencyCheck = args[3];
+			}
 			try {
 				solverTimeout = Integer.parseInt(args[2]);
 			} catch(NumberFormatException e) {
@@ -47,8 +51,14 @@ public class monsterSudokuSolver {
 	private static void solveSudoku(){
 		SudokuFile sf = SudokuBoardReader.readFile(inputFile);
 		BTSolver solver = new BTSolver(sf);
+	
+		switch(consistencyCheck.toLowerCase()){
+			case "fc": solver.setConsistencyChecks(ConsistencyCheck.ForwardChecking);
+					   break;
+			default: solver.setConsistencyChecks(ConsistencyCheck.None);
+					 break;
+		}
 		
-		solver.setConsistencyChecks(ConsistencyCheck.None);
 		solver.setValueSelectionHeuristic(ValueSelectionHeuristic.None);
 		solver.setVariableSelectionHeuristic(VariableSelectionHeuristic.None);
 		
