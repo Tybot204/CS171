@@ -219,7 +219,8 @@ public class BTSolver implements Runnable{
 		Variable next = null;
 		switch(varHeuristics)
 		{
-		case None: 					next = getfirstUnassignedVariable();
+		//case None: 					next = getfirstUnassignedVariable();
+		case None: 					next = getMRV();
 		break;
 		case MinimumRemainingValue: next = getMRV();
 		break;
@@ -253,6 +254,23 @@ public class BTSolver implements Runnable{
 	 */
 	private Variable getMRV()
 	{
+		//Not sure how reliable it is to check Integer.MAX_VALUE
+		boolean foundSomething = false;
+		//Initialize minLegalMoves to Integer.MAX_VALUE
+		int minLegalMoves = Integer.MAX_VALUE;
+		//Hold a temporary variable
+		Variable tempVar = network.getVariables().get(0);
+		for(Variable v: network.getVariables()){
+			if(!v.isAssigned() && v.size() < minLegalMoves)
+			{
+				foundSomething = true;
+				minLegalMoves = v.size();
+				tempVar = v;
+			}
+		}
+		if(foundSomething){
+			return tempVar;
+		}
 		return null;
 	}
 	
