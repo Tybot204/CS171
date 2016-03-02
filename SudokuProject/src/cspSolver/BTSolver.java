@@ -244,7 +244,6 @@ public class BTSolver implements Runnable{
 		{
 			if(!v.isAssigned())
 			{
-				System.out.println("Returning var " + v.toString());
 				return v;
 			}
 		}
