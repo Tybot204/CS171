@@ -220,8 +220,9 @@ public class BTSolver implements Runnable{
 		switch(varHeuristics)
 		{
 		//TODO read var Heuristics ugh
-		//case None: 					next = getfirstUnassignedVariable();
-		case None: 					next = getMRV();
+		case None: 					next = getfirstUnassignedVariable();
+		//case None: 					next = getMRV();
+		//case None: 					next = getDegree();
 		break;
 		case MinimumRemainingValue: next = getMRV();
 		break;
@@ -243,6 +244,7 @@ public class BTSolver implements Runnable{
 		{
 			if(!v.isAssigned())
 			{
+				System.out.println("Returning var " + v.toString());
 				return v;
 			}
 		}
@@ -277,6 +279,26 @@ public class BTSolver implements Runnable{
 	 */
 	private Variable getDegree()
 	{
+		List<Variable> tempNetwork = network.getVariables();
+		int maxDegree = 0;
+		Variable tempVar = tempNetwork.get(0);
+		for(Variable v: tempNetwork){
+			if(!v.isAssigned()){
+				int tempDegree = 0;
+				for(Variable w: network.getNeighborsOfVariable(v)){
+					if(!w.isAssigned()){
+						tempDegree++;
+					}
+				}
+				if(tempDegree > maxDegree){
+					maxDegree = tempDegree;
+					tempVar = v;
+				}
+			}
+		}
+		if(maxDegree != 0){
+			return tempVar;
+		}
 		return null;
 	}
 	
