@@ -19,6 +19,8 @@ public class monsterSudokuSolver {
 	private static long preprocessingStartTime;
 	private static long preprocessingEndTime;
 	private static String consistencyCheck = "";
+	public static String variableSelectionHeuristic = "";
+	public static String valueSelectionHeuristic = "";
 	
 	public static void main(String[]args){
 		preprocessingStartTime = System.currentTimeMillis();
@@ -35,8 +37,30 @@ public class monsterSudokuSolver {
 		if(args.length >= 3){
 			inputFile = args[0];
 			outputFile = args[1];
+			boolean dhOrMrvOn = false;
 			if(args.length >= 4){
-				consistencyCheck = args[3];
+				for(int i = 3; i < args.length; i++){
+					switch(args[i].toLowerCase()){
+					case "fc":
+						consistencyCheck = args[i];
+						break;
+					case "mrv":
+					case "dh":
+						if(dhOrMrvOn){
+							variableSelectionHeuristic = "mrvdh";
+						}
+						else{
+							variableSelectionHeuristic = args[i];
+							dhOrMrvOn = true;
+						}
+						break;
+					case "lcv":
+						valueSelectionHeuristic = args[i];
+						break;
+					default:
+						break;
+					}
+				}
 			}
 			try {
 				solverTimeout = Integer.parseInt(args[2]);
@@ -60,9 +84,28 @@ public class monsterSudokuSolver {
 				solver.setConsistencyChecks(ConsistencyCheck.None);
 				break;
 		}
-		
-		solver.setValueSelectionHeuristic(ValueSelectionHeuristic.None);
-		solver.setVariableSelectionHeuristic(VariableSelectionHeuristic.None);
+		switch(variableSelectionHeuristic.toLowerCase()){
+			case "mrv":
+				solver.setVariableSelectionHeuristic(VariableSelectionHeuristic.MinimumRemainingValue);
+				break;
+			case "dh":
+				solver.setVariableSelectionHeuristic(VariableSelectionHeuristic.Degree);
+				break;
+			case "mrvdh":
+				solver.setVariableSelectionHeuristic(VariableSelectionHeuristic.MRVDH);
+				break;
+			default:
+				solver.setVariableSelectionHeuristic(VariableSelectionHeuristic.None);
+				break;
+		}
+		switch(valueSelectionHeuristic.toLowerCase()){
+		case "lcv":
+			solver.setValueSelectionHeuristic(ValueSelectionHeuristic.LeastConstrainingValue);
+			break;
+		default:
+			solver.setValueSelectionHeuristic(ValueSelectionHeuristic.None);
+			break;
+		}
 		
 		preprocessingEndTime = System.currentTimeMillis();
 		Thread t1 = new Thread(solver);

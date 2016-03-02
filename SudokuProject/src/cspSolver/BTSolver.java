@@ -379,7 +379,29 @@ public class BTSolver implements Runnable{
 	 */
 	public List<Integer> getValuesLCVOrder(Variable v)
 	{
-		return null;
+		List<Integer> values = v.getDomain().getValues();
+		Comparator<Integer> valueComparator = new Comparator<Integer>(){
+
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				Integer timesi1InDomainOfCells = 0;
+				Integer timesi2InDomainOfCells = 0;
+				for(Variable w: network.getNeighborsOfVariable(v)){
+					if(!w.isAssigned()){
+						List<Integer> neighborDomain = w.getDomain().getValues();
+						if(neighborDomain.contains(i1)){
+							timesi1InDomainOfCells++;
+						}
+						else if(neighborDomain.contains(i2)){
+							timesi2InDomainOfCells++;
+						}
+					}
+				}
+				return timesi1InDomainOfCells.compareTo(timesi2InDomainOfCells);
+			}
+		};
+		Collections.sort(values, valueComparator);
+		return values;
 	}
 	/**
 	 * Called when solver finds a solution
