@@ -386,12 +386,13 @@ public class BTSolver implements Runnable{
 			public int compare(Integer i1, Integer i2) {
 				Integer timesi1InDomainOfCells = 0;
 				Integer timesi2InDomainOfCells = 0;
-				for(Variable v: network.getNeighborsOfVariable(v)){
-					if(!v.isAssigned()){
-						if(values.contains(i1)){
+				for(Variable w: network.getNeighborsOfVariable(v)){
+					if(!w.isAssigned()){
+						List<Integer> neighborDomain = w.getDomain().getValues();
+						if(neighborDomain.contains(i1)){
 							timesi1InDomainOfCells++;
 						}
-						else if(values.contains(i2)){
+						else if(neighborDomain.contains(i2)){
 							timesi2InDomainOfCells++;
 						}
 					}
