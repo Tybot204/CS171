@@ -25,7 +25,7 @@ public class BTSolver implements Runnable{
 	private long startTime;
 	private long endTime;
 	
-	public enum VariableSelectionHeuristic { None, MinimumRemainingValue, Degree };
+	public enum VariableSelectionHeuristic { None, MinimumRemainingValue, Degree, MRVDH};
 	public enum ValueSelectionHeuristic    { None, LeastConstrainingValue };
 	public enum ConsistencyCheck		   { None, ForwardChecking, ArcConsistency };
 	
@@ -219,14 +219,14 @@ public class BTSolver implements Runnable{
 		Variable next = null;
 		switch(varHeuristics)
 		{
-		//TODO read var Heuristics ugh
-		case None: 					next = getfirstUnassignedVariable();
-		//case None: 					next = getMRV();
-		//case None: 					next = getDegree();
+
+		case None:                  next = getfirstUnassignedVariable();
 		break;
 		case MinimumRemainingValue: next = getMRV();
 		break;
 		case Degree:				next = getDegree();
+		break;
+		case MRVDH:                 next = getMRVWithDH();
 		break;
 		default:					next = getfirstUnassignedVariable();
 		break;
@@ -284,12 +284,7 @@ public class BTSolver implements Runnable{
 		Variable tempVar = tempNetwork.get(0);
 		for(Variable v: tempNetwork){
 			if(!v.isAssigned()){
-				int tempDegree = 0;
-				for(Variable w: network.getNeighborsOfVariable(v)){
-					if(!w.isAssigned()){
-						tempDegree++;
-					}
-				}
+				int tempDegree = getDegree(v);
 				if(tempDegree > maxDegree){
 					maxDegree = tempDegree;
 					tempVar = v;
@@ -297,6 +292,44 @@ public class BTSolver implements Runnable{
 			}
 		}
 		if(maxDegree != 0){
+			return tempVar;
+		}
+		return null;
+	}
+	/**
+	 *  This function gets the degree of a variable
+	 */
+	private int getDegree(Variable v){
+		int degree = 0;
+		for(Variable w: network.getNeighborsOfVariable(v)){
+			if(!w.isAssigned()){
+				degree++;
+			}
+		}
+		return degree;
+	}
+	/**
+	 * TODO: Implement MRV WITH DH
+	 * @return variable with minimum remaining values that isn't assigned, null if all variables are assigned DH as tie breaker.
+	 */
+	private Variable getMRVWithDH()
+	{
+		List<Variable> tempNetwork = network.getVariables();
+		int minLegalMoves = Integer.MAX_VALUE;
+		Variable tempVar = tempNetwork.get(0);
+		for(Variable v: tempNetwork){
+			if(!v.isAssigned())
+			{
+				if(v.size() == minLegalMoves && getDegree(v) > getDegree(tempVar)){
+					tempVar = v;
+				}
+				else if(v.size() < minLegalMoves){
+					minLegalMoves = v.size();
+					tempVar = v;
+				}
+			}
+		}
+		if(minLegalMoves != Integer.MAX_VALUE){
 			return tempVar;
 		}
 		return null;
