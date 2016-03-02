@@ -257,16 +257,16 @@ public class BTSolver implements Runnable{
 	private Variable getMRV()
 	{
 		List<Variable> tempNetwork = network.getVariables();
-		int minLegalMoves = Integer.MAX_VALUE;
+		int minRemainingValues = Integer.MAX_VALUE;
 		Variable tempVar = tempNetwork.get(0);
 		for(Variable v: tempNetwork){
-			if(!v.isAssigned() && v.size() < minLegalMoves)
+			if(!v.isAssigned() && v.size() < minRemainingValues)
 			{
-				minLegalMoves = v.size();
+				minRemainingValues = v.size();
 				tempVar = v;
 			}
 		}
-		if(minLegalMoves != Integer.MAX_VALUE){
+		if(minRemainingValues != Integer.MAX_VALUE){
 			return tempVar;
 		}
 		return null;
@@ -314,21 +314,21 @@ public class BTSolver implements Runnable{
 	private Variable getMRVWithDH()
 	{
 		List<Variable> tempNetwork = network.getVariables();
-		int minLegalMoves = Integer.MAX_VALUE;
+		int minRemainingValues = Integer.MAX_VALUE;
 		Variable tempVar = tempNetwork.get(0);
 		for(Variable v: tempNetwork){
 			if(!v.isAssigned())
 			{
-				if(v.size() == minLegalMoves && getDegree(v) > getDegree(tempVar)){
+				if(v.size() == minRemainingValues && getDegree(v) > getDegree(tempVar)){
 					tempVar = v;
 				}
-				else if(v.size() < minLegalMoves){
-					minLegalMoves = v.size();
+				else if(v.size() < minRemainingValues){
+					minRemainingValues = v.size();
 					tempVar = v;
 				}
 			}
 		}
-		if(minLegalMoves != Integer.MAX_VALUE){
+		if(minRemainingValues != Integer.MAX_VALUE){
 			return tempVar;
 		}
 		return null;
