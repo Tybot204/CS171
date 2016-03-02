@@ -387,7 +387,7 @@ public class BTSolver implements Runnable{
 				Integer timesi1InDomainOfCells = 0;
 				Integer timesi2InDomainOfCells = 0;
 				for(Variable v: network.getNeighborsOfVariable(v)){
-					if(!v.isAssigned() && values.contains(i1)){
+					if(!v.isAssigned()){
 						if(values.contains(i1)){
 							timesi1InDomainOfCells++;
 						}
