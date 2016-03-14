@@ -1,4 +1,5 @@
 package cspSolver;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -300,11 +301,13 @@ public class BTSolver implements Runnable{
 	 */
 	private int getDegree(Variable v){
 		int degree = 0;
-		for(Variable w: network.getNeighborsOfVariable(v)){
-			if(!w.isAssigned()){
-				degree++;
-			}
+		List<Constraint> tempList =  network.getConstraintsContainingVariable(v);
+		List<Variable> checkedVars = new ArrayList<Variable>();
+		for(Constraint t: tempList){
+			degree += t.findDegree(checkedVars);
+			checkedVars.addAll(t.vars);
 		}
+		degree-=1;
 		return degree;
 	}
 	/**
