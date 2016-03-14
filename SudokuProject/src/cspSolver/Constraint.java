@@ -46,16 +46,6 @@ public class Constraint{
 	{
 		return vars.size();
 	}
-	
-	public int findDegree(List<Variable> previouslyCheckedVars){
-		int tempDegree = 0;
-		for(Variable v: vars){
-			if(!v.isAssigned() && !previouslyCheckedVars.contains(v)){
-				tempDegree++;
-			}
-		}
-		return tempDegree;
-	}
 	/**
 	 * 
 	 * @param v a Variable
