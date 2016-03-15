@@ -1,5 +1,4 @@
 package cspSolver;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -280,18 +279,20 @@ public class BTSolver implements Runnable{
 	private Variable getDegree()
 	{
 		List<Variable> tempNetwork = network.getVariables();
-		int maxDegree = 0;
+		int maxDegree = -1;
+		boolean foundSomething = false;
 		Variable tempVar = tempNetwork.get(0);
 		for(Variable v: tempNetwork){
 			if(!v.isAssigned()){
 				int tempDegree = getDegree(v);
 				if(tempDegree > maxDegree){
+					foundSomething = true;
 					maxDegree = tempDegree;
 					tempVar = v;
 				}
 			}
 		}
-		if(maxDegree != 0){
+		if(foundSomething){
 			return tempVar;
 		}
 		return null;
@@ -301,17 +302,11 @@ public class BTSolver implements Runnable{
 	 */
 	private int getDegree(Variable v){
 		int degree = 0;
-		List<Constraint> tempList =  network.getConstraintsContainingVariable(v);
-		List<String> checkedVars = new ArrayList<String>();
-		for(Constraint t: tempList){
-			for(Variable w: t.vars){
-				if(!w.isAssigned() && !checkedVars.contains(w.getName())){
-					degree++;
-					checkedVars.add(w.getName());
-				}
+		for(Variable w: network.getNeighborsOfVariable(v)){
+			if(!w.isAssigned()){
+				degree++;
 			}
 		}
-		degree-=1;
 		return degree;
 	}
 	/**
