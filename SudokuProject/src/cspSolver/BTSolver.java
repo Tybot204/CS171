@@ -279,23 +279,23 @@ public class BTSolver implements Runnable{
 	private Variable getDegree()
 	{
 		List<Variable> tempNetwork = network.getVariables();
-		int maxDegree = -1;
-		boolean foundSomething = false;
-		Variable tempVar = tempNetwork.get(0);
+		boolean firstTime = true;
+		Variable tempVar = null;
+		
 		for(Variable v: tempNetwork){
 			if(!v.isAssigned()){
-				int tempDegree = getDegree(v);
-				if(tempDegree > maxDegree){
-					foundSomething = true;
-					maxDegree = tempDegree;
+				if(firstTime){
+					firstTime = false;
 					tempVar = v;
+				}
+				else{
+					if(getDegree(v) > getDegree(tempVar)){
+						tempVar = v;
+					}
 				}
 			}
 		}
-		if(foundSomething){
-			return tempVar;
-		}
-		return null;
+		return tempVar;
 	}
 	/**
 	 *  This function gets the degree of a variable
@@ -315,25 +315,30 @@ public class BTSolver implements Runnable{
 	 */
 	private Variable getMRVWithDH()
 	{
+		boolean firstTime = true;
 		List<Variable> tempNetwork = network.getVariables();
-		int minRemainingValues = Integer.MAX_VALUE;
-		Variable tempVar = tempNetwork.get(0);
+		Variable tempVar = null;
+		
 		for(Variable v: tempNetwork){
-			if(!v.isAssigned())
-			{
-				if(v.size() == minRemainingValues && getDegree(v) > getDegree(tempVar)){
+			if(!v.isAssigned()){
+				if(firstTime){
+					firstTime = false;
 					tempVar = v;
 				}
-				else if(v.size() < minRemainingValues){
-					minRemainingValues = v.size();
-					tempVar = v;
+				else{
+					if(v.size() < tempVar.size()){
+						tempVar = v;		
+					}
+					else if(v.size() == tempVar.size()){
+						if(getDegree(v) > getDegree(tempVar)){
+							tempVar = v;
+						}
+					
+					}
 				}
 			}
 		}
-		if(minRemainingValues != Integer.MAX_VALUE){
-			return tempVar;
-		}
-		return null;
+		return tempVar;
 	}
 	
 	/**
@@ -453,7 +458,6 @@ public class BTSolver implements Runnable{
 
 			//Select unassigned variable
 			Variable v = selectNextVariable();		
-
 			//check if the assignment is complete
 			if(v == null)
 			{
@@ -467,7 +471,8 @@ public class BTSolver implements Runnable{
 				success();
 				return;
 			}
-
+			
+			//System.out.println(v.getName());
 			//loop through the values of the variable being checked LCV
 
 			
