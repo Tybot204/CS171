@@ -3,6 +3,15 @@ import java.util.Random;
 
 
 public class SudokuBoardGenerator {
+	
+	public static void main(String[]args){
+		for(int i = 0; i < 10; i++){
+			System.out.println("Problem " + (i+1) + ": ===============");
+			System.out.println(generateBoard(12, 3, 4, 64, 5000));
+		}
+		//System.out.println(generateBoard(9, 3, 3, 8, 5000));
+		return;
+	}
 
 	public static SudokuFile generateBoard(int N, int p, int q, int numAssignments)
 	{	
@@ -11,7 +20,7 @@ public class SudokuBoardGenerator {
 	
 	public static SudokuFile generateBoard(int N, int p, int q, int numAssignments, long timeout)
 	{
-		//given a SudokuFile with N, P, Q, creates a board with the given params
+		//Given a SudokuFile with N, P, Q, creates a board with the given params
 		//and assigns it to the board of the SudokuFile.
 		//timeout represents the time in ms allowed to created the SudokuFile
 		SudokuFile sf = new SudokuFile(N, p, q);
@@ -87,7 +96,7 @@ public class SudokuBoardGenerator {
 		return true;
 	}
 
-	public static boolean checkBox(int row, int column, int value, int p, int q, int[][] board)
+	public static boolean checkBox(int row, int column, int value, int q, int p, int[][] board)
 	{
 		int rDiv = row/p;
 		int cDiv = column/q;

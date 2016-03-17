@@ -92,12 +92,12 @@ public class BTSolver implements Runnable{
 
 	public String getSolverStats(long preprocessingStart, long preprocessingDone){
 		StringBuilder sb = new StringBuilder();
-		sb.append("TOTAL_START=" + preprocessingStart/1000 + "\n");
-		sb.append("PREPROCESSING_START=" + preprocessingStart/1000 + "\n");
-		sb.append("PREPROCESSING_DONE=" + preprocessingDone/1000 + "\n");
-		sb.append("SEARCH_START=" + startTime/1000 + "\n");
-		sb.append("SEARCH_DONE=" + endTime/1000 + "\n");
-		sb.append("SOLUTION_TIME=" + ((preprocessingDone - preprocessingStart) + getTimeTaken())/1000 + "\n");
+		sb.append("TOTAL_START=" + preprocessingStart + "\n");
+		sb.append("PREPROCESSING_START=" + preprocessingStart + "\n");
+		sb.append("PREPROCESSING_DONE=" + preprocessingDone + "\n");
+		sb.append("SEARCH_START=" + startTime + "\n");
+		sb.append("SEARCH_DONE=" + endTime + "\n");
+		sb.append("SOLUTION_TIME=" + ((preprocessingDone - preprocessingStart) + getTimeTaken()) + "\n");
 		if (hasSolution) {
 			sb.append("STATUS=success\n");
 			sb.append("SOLUTION=" + sudokuGrid.getOneLineSolution() + "\n");			
@@ -289,7 +289,7 @@ public class BTSolver implements Runnable{
 					tempVar = v;
 				}
 				else{
-					if(getDegree(v) > getDegree(tempVar)){
+					if(getDegree(v) >= getDegree(tempVar)){
 						tempVar = v;
 					}
 				}
@@ -330,7 +330,7 @@ public class BTSolver implements Runnable{
 						tempVar = v;		
 					}
 					else if(v.size() == tempVar.size()){
-						if(getDegree(v) > getDegree(tempVar)){
+						if(getDegree(v) >= getDegree(tempVar)){
 							tempVar = v;
 						}
 					
